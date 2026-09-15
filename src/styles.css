@@ -5,8 +5,13 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * PayFlow design system — payments operations platform.
- * All colors are semantic tokens. Never hardcode colors in components.
+ * PayFlow design system — single source of truth.
+ *
+ * Rules:
+ *  - Every colour, radius, shadow, gradient and surface lives here as a token.
+ *  - Components never hardcode colours; they compose the utilities below.
+ *  - The marketing site and the operations dashboard share the same tokens,
+ *    the same surfaces and the same utilities.
  */
 
 @theme inline {
@@ -15,6 +20,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 16px);
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, monospace;
@@ -56,10 +62,15 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+
+  --shadow-soft: var(--elevation-1);
+  --shadow-panel: var(--elevation-2);
+  --shadow-lifted: var(--elevation-3);
+  --shadow-brand: var(--elevation-brand);
 }
 
 :root {
-  --radius: 0.75rem;
+  --radius: 0.875rem;
 
   --background: hsl(220 20% 97%);
   --foreground: hsl(222 47% 11%);
@@ -69,43 +80,65 @@
   --popover: hsl(0 0% 100%);
   --popover-foreground: hsl(222 47% 11%);
 
-  --primary: hsl(217 91% 60%);
+  --primary: hsl(217 91% 55%);
   --primary-foreground: hsl(0 0% 100%);
 
   --secondary: hsl(210 40% 96%);
   --secondary-foreground: hsl(222 47% 11%);
 
   --muted: hsl(210 40% 96%);
-  --muted-foreground: hsl(215 16% 47%);
+  --muted-foreground: hsl(215 16% 45%);
 
-  --accent: hsl(172 66% 40%);
+  --accent: hsl(172 66% 38%);
   --accent-foreground: hsl(0 0% 100%);
 
-  --destructive: hsl(0 84% 60%);
+  --destructive: hsl(0 84% 58%);
   --destructive-foreground: hsl(0 0% 100%);
-  --success: hsl(142 71% 40%);
+  --success: hsl(142 71% 38%);
   --success-foreground: hsl(0 0% 100%);
-  --warning: hsl(38 92% 45%);
+  --warning: hsl(38 92% 42%);
   --warning-foreground: hsl(0 0% 100%);
 
   --border: hsl(214 32% 91%);
   --input: hsl(214 32% 91%);
-  --ring: hsl(217 91% 60%);
+  --ring: hsl(217 91% 55%);
 
   --sidebar-background: hsl(222 47% 11%);
   --sidebar-foreground: hsl(210 40% 98%);
-  --sidebar-primary: hsl(217 91% 60%);
+  --sidebar-primary: hsl(213 94% 74%);
   --sidebar-primary-foreground: hsl(0 0% 100%);
-  --sidebar-accent: hsl(217 33% 17%);
+  --sidebar-accent: hsl(217 33% 18%);
   --sidebar-accent-foreground: hsl(210 40% 98%);
-  --sidebar-border: hsl(217 33% 17%);
+  --sidebar-border: hsl(217 33% 18%);
   --sidebar-ring: hsl(217 91% 60%);
 
-  --chart-1: hsl(217 91% 60%);
-  --chart-2: hsl(172 66% 50%);
-  --chart-3: hsl(142 71% 45%);
-  --chart-4: hsl(38 92% 50%);
-  --chart-5: hsl(0 84% 60%);
+  --chart-1: hsl(217 91% 55%);
+  --chart-2: hsl(172 66% 42%);
+  --chart-3: hsl(142 71% 40%);
+  --chart-4: hsl(38 92% 46%);
+  --chart-5: hsl(0 84% 58%);
+
+  /* Elevation scale — referenced through shadow-soft / shadow-panel / … */
+  --elevation-1: 0 1px 2px 0 hsl(222 47% 11% / 0.05);
+  --elevation-2:
+    0 1px 2px 0 hsl(222 47% 11% / 0.05), 0 12px 28px -18px hsl(222 47% 11% / 0.28);
+  --elevation-3:
+    0 2px 4px 0 hsl(222 47% 11% / 0.06), 0 24px 48px -24px hsl(222 47% 11% / 0.32);
+  --elevation-brand: 0 16px 40px -18px color-mix(in srgb, var(--primary) 55%, transparent);
+
+  /* Composed surfaces */
+  --surface-panel: color-mix(in srgb, var(--card) 88%, transparent);
+  --surface-subtle: color-mix(in srgb, var(--card) 60%, transparent);
+  --gradient-brand: linear-gradient(
+    135deg,
+    var(--primary),
+    color-mix(in srgb, var(--accent) 70%, var(--primary))
+  );
+  --gradient-glow: radial-gradient(
+    120% 80% at 50% 0%,
+    color-mix(in srgb, var(--primary) 16%, transparent),
+    transparent 70%
+  );
 }
 
 .dark {
@@ -126,30 +159,44 @@
   --secondary-foreground: hsl(210 40% 98%);
 
   --muted: hsl(217 33% 17%);
-  --muted-foreground: hsl(215 20% 65%);
+  --muted-foreground: hsl(215 20% 68%);
 
   --accent: hsl(172 66% 50%);
   --accent-foreground: hsl(222 47% 6%);
 
-  --destructive: hsl(0 72% 51%);
+  --destructive: hsl(0 72% 55%);
   --destructive-foreground: hsl(210 40% 98%);
   --success: hsl(142 71% 45%);
   --success-foreground: hsl(0 0% 100%);
-  --warning: hsl(38 92% 50%);
+  --warning: hsl(38 92% 55%);
   --warning-foreground: hsl(222 47% 6%);
 
-  --border: hsl(217 33% 17%);
-  --input: hsl(217 33% 17%);
+  --border: hsl(217 33% 18%);
+  --input: hsl(217 33% 18%);
   --ring: hsl(217 91% 60%);
 
-  --sidebar-background: hsl(222 47% 6%);
+  --sidebar-background: hsl(222 47% 8%);
   --sidebar-foreground: hsl(210 40% 98%);
-  --sidebar-primary: hsl(217 91% 60%);
+  --sidebar-primary: hsl(213 94% 74%);
   --sidebar-primary-foreground: hsl(0 0% 100%);
   --sidebar-accent: hsl(217 33% 17%);
   --sidebar-accent-foreground: hsl(210 40% 98%);
   --sidebar-border: hsl(217 33% 20%);
   --sidebar-ring: hsl(217 91% 60%);
+
+  --chart-1: hsl(217 91% 62%);
+  --chart-2: hsl(172 66% 52%);
+  --chart-3: hsl(142 71% 48%);
+  --chart-4: hsl(38 92% 56%);
+  --chart-5: hsl(0 78% 60%);
+
+  --elevation-1: 0 1px 2px 0 hsl(0 0% 0% / 0.4);
+  --elevation-2: 0 1px 2px 0 hsl(0 0% 0% / 0.4), 0 14px 30px -18px hsl(0 0% 0% / 0.7);
+  --elevation-3: 0 2px 6px 0 hsl(0 0% 0% / 0.45), 0 28px 56px -24px hsl(0 0% 0% / 0.8);
+  --elevation-brand: 0 18px 44px -18px color-mix(in srgb, var(--primary) 45%, transparent);
+
+  --surface-panel: color-mix(in srgb, var(--card) 82%, transparent);
+  --surface-subtle: color-mix(in srgb, var(--card) 55%, transparent);
 }
 
 @layer base {
@@ -157,49 +204,23 @@
     border-color: var(--border);
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     background-color: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans);
-  }
-}
-
-@layer utilities {
-  .glass-card {
-    @apply border border-border/50 bg-card/80 shadow-lg backdrop-blur-xl;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
-  .stat-card {
-    @apply border border-border/50 bg-card/80 shadow-lg backdrop-blur-xl rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl;
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
 
-  .sidebar-item {
-    @apply flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-sidebar-foreground/70 transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-foreground;
-  }
-
-  .sidebar-item-active {
-    @apply bg-sidebar-accent font-medium text-sidebar-primary;
-  }
-
-  .status-badge {
-    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
-  }
-
-  .status-success {
-    @apply bg-success/10 text-success;
-  }
-
-  .status-pending {
-    @apply bg-warning/10 text-warning;
-  }
-
-  .status-failed {
-    @apply bg-destructive/10 text-destructive;
-  }
-}
-
-/* Themed scrollbar — PayFlow blue/teal on muted track */
-@layer base {
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -221,16 +242,414 @@
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: color-mix(in srgb, var(--primary) 55%, var(--muted))
-      var(--muted);
+    scrollbar-color: color-mix(in srgb, var(--primary) 55%, var(--muted)) var(--muted);
   }
 }
 
+/* ---------------------------------------------------------------- surfaces */
+
+@utility surface-panel {
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  background-color: var(--surface-panel);
+  box-shadow: var(--elevation-2);
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius-xl);
+}
+
+/* Legacy alias kept so every existing panel stays on the same surface. */
+@utility glass-card {
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  background-color: var(--surface-panel);
+  box-shadow: var(--elevation-2);
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius-xl);
+}
+
+@utility panel-pad {
+  padding: --spacing(5);
+
+  @media (width >= 40rem) {
+    padding: --spacing(6);
+  }
+}
+
+@utility stat-card {
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  background-color: var(--surface-panel);
+  box-shadow: var(--elevation-2);
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius-xl);
+  padding: --spacing(5);
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--primary) 35%, transparent);
+    box-shadow: var(--elevation-3);
+  }
+
+  @media (width >= 40rem) {
+    padding: --spacing(6);
+  }
+}
+
+@utility glow-top {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-glow);
+}
+
+/* -------------------------------------------------------------- app layout */
+
+@utility page-container {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 90rem;
+  padding-inline: --spacing(4);
+
+  @media (width >= 40rem) {
+    padding-inline: --spacing(6);
+  }
+
+  @media (width >= 64rem) {
+    padding-inline: --spacing(8);
+  }
+}
+
+@utility page-stack {
+  display: flex;
+  flex-direction: column;
+  gap: --spacing(5);
+
+  @media (width >= 40rem) {
+    gap: --spacing(6);
+  }
+
+  @media (width >= 64rem) {
+    gap: --spacing(8);
+  }
+}
+
+@utility page-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: --spacing(3);
+
+  @media (width >= 40rem) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: --spacing(4);
+  }
+}
+
+@utility page-title {
+  font-size: --spacing(6);
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+
+  @media (width >= 40rem) {
+    font-size: --spacing(7.5);
+  }
+}
+
+@utility page-subtitle {
+  margin-top: --spacing(1);
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+
+  @media (width >= 40rem) {
+    font-size: 1rem;
+  }
+}
+
+@utility section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--foreground);
+
+  @media (width >= 40rem) {
+    font-size: 1.875rem;
+  }
+}
+
+@utility panel-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
+/* -------------------------------------------------------------- components */
+
+@utility icon-tile {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: --spacing(10);
+  height: --spacing(10);
+  border-radius: var(--radius-md);
+  background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+  color: var(--primary);
+  transition: background-color 0.2s ease;
+}
+
+@utility brand-mark {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: --spacing(9);
+  height: --spacing(9);
+  border-radius: var(--radius-md);
+  background: var(--gradient-brand);
+  color: var(--primary-foreground);
+  box-shadow: var(--elevation-brand);
+}
+
+@utility btn-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: --spacing(2);
+  border-radius: var(--radius-lg);
+  background: var(--gradient-brand);
+  padding: --spacing(2.5) --spacing(5);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--primary-foreground);
+  box-shadow: var(--elevation-brand);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--elevation-3);
+  }
+}
+
+@utility btn-quiet {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: --spacing(2);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background-color: var(--surface-panel);
+  padding: --spacing(2.5) --spacing(5);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: var(--muted);
+  }
+}
+
+@utility icon-button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: --spacing(9);
+  height: --spacing(9);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background-color: var(--surface-panel);
+  color: var(--muted-foreground);
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+
+  &:hover {
+    background-color: var(--muted);
+    color: var(--foreground);
+  }
+}
+
+@utility field-input {
+  width: 100%;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background-color: var(--secondary);
+  padding: --spacing(2) --spacing(3.5);
+  font-size: 0.875rem;
+  color: var(--foreground);
+
+  &::placeholder {
+    color: var(--muted-foreground);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--ring);
+  }
+}
+
+@utility toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: --spacing(3);
+  padding: --spacing(4);
+}
+
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  gap: --spacing(1.5);
+  border-radius: 9999px;
+  padding: --spacing(1) --spacing(2.5);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+@utility chip-primary {
+  background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+  color: var(--primary);
+}
+
+@utility chip-accent {
+  background-color: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--accent);
+}
+
+@utility chip-warning {
+  background-color: color-mix(in srgb, var(--warning) 16%, transparent);
+  color: var(--warning);
+}
+
+@utility chip-muted {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}
+
+@utility chip-outline {
+  border: 1px solid var(--border);
+  background-color: var(--surface-subtle);
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+/* ------------------------------------------------------------ data tables */
+
+@utility table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@utility data-table {
+  width: 100%;
+  min-width: 44rem;
+  border-collapse: collapse;
+}
+
+@utility th-cell {
+  padding: --spacing(3) --spacing(4);
+  text-align: left;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+
+@utility td-cell {
+  padding: --spacing(3) --spacing(4);
+  font-size: 0.875rem;
+  color: var(--foreground);
+  white-space: nowrap;
+}
+
+@utility table-row {
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 45%, transparent);
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--muted) 45%, transparent);
+  }
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+/* ----------------------------------------------------------------- sidebar */
+
+@utility sidebar-item {
+  display: flex;
+  width: 100%;
+  cursor: pointer;
+  align-items: center;
+  gap: --spacing(3);
+  border-radius: var(--radius-md);
+  padding: --spacing(2.5) --spacing(4);
+  color: color-mix(in srgb, var(--sidebar-foreground) 72%, transparent);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+
+  &:hover {
+    background-color: var(--sidebar-accent);
+    color: var(--sidebar-foreground);
+  }
+}
+
+@utility sidebar-item-active {
+  background-color: var(--sidebar-accent);
+  font-weight: 500;
+  color: var(--sidebar-primary);
+}
+
+/* ------------------------------------------------------------ status pills */
+
+@utility status-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: --spacing(0.5) --spacing(2.5);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+@utility status-success {
+  background-color: color-mix(in srgb, var(--success) 14%, transparent);
+  color: var(--success);
+}
+
+@utility status-pending {
+  background-color: color-mix(in srgb, var(--warning) 16%, transparent);
+  color: var(--warning);
+}
+
+@utility status-failed {
+  background-color: color-mix(in srgb, var(--destructive) 14%, transparent);
+  color: var(--destructive);
+}
+
 @utility text-gradient {
-  @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+  background: var(--gradient-brand);
+  background-clip: text;
+  color: transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {
